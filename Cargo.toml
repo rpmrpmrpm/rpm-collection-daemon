@@ -32,7 +32,7 @@ async-trait = "0.1"
 time = "0.3"
 mdns-sd = "0.13"
 log = { version = "0.4", features = ["std"] }
-x509-parser = "0.16"
+x509-parser = "0.18"
 tempfile = "3"
 rpm-wire = { path = "crates/rpm-wire" }
 rpm-peer = { path = "crates/rpm-peer" }
