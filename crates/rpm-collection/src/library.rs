@@ -261,10 +261,20 @@ impl Library {
         let found = tokio::task::spawn_blocking(move || {
             let file = snapshot.index.resolve(&folder, &rpm_id)?;
             let album = file.parent()?.to_path_buf();
+            // A kept library's pictures chosen in rpm come before the folder's own.
             if disc {
-                return fs::read(covers::disc_image(&album)?).ok();
+                return match covers::chosen_disc(&folder, &album) {
+                    covers::Chosen::Picture(chosen) => fs::read(chosen).ok(),
+                    covers::Chosen::Removed => None,
+                    covers::Chosen::Nothing => fs::read(covers::disc_image(&album)?).ok(),
+                };
             }
-            if let Some(image) = covers::folder_image(&album) {
+            let folder_picture = match covers::chosen_cover(&folder, &album) {
+                covers::Chosen::Picture(chosen) => Some(chosen),
+                covers::Chosen::Removed => None,
+                covers::Chosen::Nothing => covers::folder_image(&album),
+            };
+            if let Some(image) = folder_picture {
                 if let Ok(bytes) = fs::read(image) {
                     return Some(bytes);
                 }
