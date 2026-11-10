@@ -6,8 +6,8 @@ use std::path::Path;
 
 use p256::ecdsa::signature::{Signer, Verifier};
 use p256::ecdsa::{Signature, SigningKey, VerifyingKey};
+use p256::elliptic_curve::Generate;
 use p256::pkcs8::{DecodePrivateKey, DecodePublicKey, EncodePrivateKey, EncodePublicKey};
-use rand_core::OsRng;
 use rpm_wire::base::crockford32;
 use sha2::{Digest, Sha256};
 
@@ -25,7 +25,7 @@ pub struct Identity {
 impl Identity {
     /// A new random key.
     pub fn generate() -> Identity {
-        Identity::from_signing(SigningKey::random(&mut OsRng))
+        Identity::from_signing(SigningKey::generate())
     }
 
     /// A key read from PKCS#8 DER, the format `RPM.Core` exports.

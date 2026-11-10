@@ -4,8 +4,7 @@ use std::collections::{HashMap, VecDeque};
 use std::sync::Mutex;
 use std::time::{Duration, Instant};
 
-use hmac::{Hmac, Mac};
-use rand_core::{OsRng, RngCore};
+use hmac::{Hmac, KeyInit, Mac};
 use rpm_wire::base::{from_base64url, to_base64url};
 use rpm_wire::{SessionChallenge, SessionGrant, SessionProof};
 use sha2::{Digest, Sha256};
@@ -207,6 +206,6 @@ pub fn ticket(token: &str, route: &str, id: &str) -> String {
 
 fn random<const N: usize>() -> [u8; N] {
     let mut bytes = [0u8; N];
-    OsRng.fill_bytes(&mut bytes);
+    getrandom::fill(&mut bytes).expect("the system random number generator works");
     bytes
 }
