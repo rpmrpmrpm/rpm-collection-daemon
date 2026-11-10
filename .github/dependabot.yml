@@ -4,7 +4,17 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
   - package-ecosystem: cargo
     directory: /
     schedule:
       interval: monthly
+    groups:
+      # These share the digest and elliptic-curve traits. One of them updated alone does not build.
+      crypto:
+        patterns: ["p256", "sha2", "hmac", "getrandom"]
+      # tokio-rustls is built for one rustls version.
+      tls:
+        patterns: ["rustls", "tokio-rustls"]
