@@ -1,0 +1,22 @@
+# rpm collection daemon settings. Environment variables with the same names in capitals and an RPM_
+# prefix (RPM_ROOT, RPM_LIMIT, ...) override these.
+
+# The folder that holds the libraries. Each subfolder is one person's library. rpm creates the
+# subfolders when someone picks this NAS.
+root = "/volume1/music/rpm"
+
+# The space limit for all libraries together: for example "2TB" or "500GB". Leave it out for no limit.
+limit = "2TB"
+
+# The name rpm shows for this NAS. Default: the host name.
+# name = "DiskStation"
+
+# Where the daemon keeps its keys and the uploaded catalogues. Never inside root.
+data = "/var/lib/rpm-collection-daemon"
+
+# How computers reach root over SMB.
+smb_share = "smb://diskstation.local/music/rpm"
+
+# The first port to listen on, when a firewall on the NAS needs fixed ports. The NAS uses this port
+# and the libraries the next ones. Leave it out to let the system choose.
+# port = 47100

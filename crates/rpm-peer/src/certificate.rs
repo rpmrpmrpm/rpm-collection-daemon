@@ -40,7 +40,9 @@ pub fn certificate(identity: &Identity) -> Result<CertificateDer<'static>, rcgen
 }
 
 /// The TLS server settings for `identity`: its certificate, HTTP/1.1 only.
-pub fn server_config(identity: &Identity) -> Result<Arc<ServerConfig>, Box<dyn std::error::Error>> {
+pub fn server_config(
+    identity: &Identity,
+) -> Result<Arc<ServerConfig>, Box<dyn std::error::Error + Send + Sync>> {
     let provider = Arc::new(rustls::crypto::ring::default_provider());
     let key = PrivateKeyDer::Pkcs8(PrivatePkcs8KeyDer::from(identity.pkcs8().to_vec()));
     let mut config = ServerConfig::builder_with_provider(provider)

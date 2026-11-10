@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/rpm-wire", "crates/rpm-peer", "crates/rpm-collection"]
+members = ["crates/rpm-wire", "crates/rpm-peer", "crates/rpm-collection", "crates/rpm-daemon"]
 
 [workspace.package]
 version = "0.1.0"
@@ -31,7 +31,7 @@ bytes = "1"
 async-trait = "0.1"
 time = "0.3"
 mdns-sd = "0.13"
-log = "0.4"
+log = { version = "0.4", features = ["std"] }
 x509-parser = "0.16"
 tempfile = "3"
 rpm-wire = { path = "crates/rpm-wire" }
@@ -41,6 +41,8 @@ lofty = "0.22"
 unicode-normalization = "0.1"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 libc = "0.2"
+toml = { version = "0.8", default-features = false, features = ["parse"] }
+gethostname = "0.5"
 
 [profile.release]
 lto = true
