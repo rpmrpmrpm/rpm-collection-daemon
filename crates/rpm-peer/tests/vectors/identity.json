@@ -1,0 +1,18 @@
+{
+  "comment": "Made with openssl and Python. RPM.Core and the collection daemon must both reproduce every value.",
+  "pkcs8": "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgZ-cfOCbT8gGmgDQGJrmehoGzhiAKnyO5UmE0IYEiXRqhRANCAATXqoaOQ1BilpSKcEV31EqwbQbRk2cMcYAeziOhEQEMyHW8-hNc0Mu5GxsqcyqwQex0sV36nkO2iOEtBtR_2xSa",
+  "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE16qGjkNQYpaUinBFd9RKsG0G0ZNnDHGAHs4joREBDMh1vPoTXNDLuRsbKnMqsEHsdLFd-p5DtojhLQbUf9sUmg",
+  "deviceId": "EA8CZ2HEG29W409FEK88R9QA9W",
+  "serverDeviceId": "TESTSERVER",
+  "challenge": "abc",
+  "account": "user-1",
+  "data": "cnBtLXNoYXJlLXNlc3Npb24KVEVTVFNFUlZFUgphYmMKdXNlci0x",
+  "signature": "_o1HCjCemV-JxZ4q1Q34nWJbU4C0F3o208KBIkjVkckNlu7wu7BgMdS6KW5MaM2RJH5k0A_HE7STS1OEjX4lCw",
+  "token": "test-token-0123456789",
+  "handle": "L9sagbWo9G3xza4vCV1wtw",
+  "ticketRoute": "/rpm/track/",
+  "ticketId": "RPM0001",
+  "ticket": "U5laTGzGGqnhEq4q8s-Owg",
+  "accountFingerprintUserId": "user-1",
+  "accountFingerprint": "xsKJ5J6cBbIUWGA4"
+}
