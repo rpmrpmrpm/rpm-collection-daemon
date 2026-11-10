@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in the daemon does not work as it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Install ...
+        2. In rpm, choose ...
+        3. See ...
+  - type: dropdown
+    id: system
+    attributes:
+      label: Where the daemon runs
+      options:
+        - Synology package
+        - Docker
+        - Linux (install script)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Daemon, NAS system and rpm versions
+      placeholder: rpm-collection-daemon 0.1.0 on DSM 7.2, rpm 1.4.2 on macOS 26.1
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Optional. The daemon writes its log to standard error. Remove anything private.

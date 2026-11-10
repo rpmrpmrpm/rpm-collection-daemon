@@ -1,0 +1,48 @@
+{
+  "version": "AbCdEfGhIjKlMnOp",
+  "name": "Test collection",
+  "tracks": [
+    {
+      "rpmId": "RPM0001",
+      "path": "Artist/Album/01 First.flac",
+      "title": "First",
+      "artist": "Artist",
+      "albumArtist": "Artist",
+      "album": "Album",
+      "genre": "Jazz",
+      "composer": "Composer",
+      "work": "Work",
+      "movement": "Movement",
+      "movementNo": 1,
+      "discSubtitle": "Side A",
+      "track": 1,
+      "disc": 1,
+      "discs": 1,
+      "year": 1965,
+      "seconds": 312.5,
+      "size": 41234567,
+      "added": 638500000000000000,
+      "channels": 2,
+      "sampleRate": 44100,
+      "bits": 16,
+      "bitrate": 1050,
+      "codec": "FLAC",
+      "lufs": -14.2,
+      "peak": -0.3,
+      "hash": "abc123",
+      "advisory": 0,
+      "cloudOnly": false,
+      "inCloud": true,
+      "addedByALaterBuild": { "anything": [1, 2, 3] }
+    },
+    {
+      "rpmId": "RPM0002",
+      "path": "Artist/Album/02 Second.flac",
+      "cloudOnly": true
+    }
+  ],
+  "albums": [],
+  "playlists": [{ "id": 12, "name": "Late", "items": [], "picture": "0011223344556677" }],
+  "moodLists": [],
+  "hosts": []
+}

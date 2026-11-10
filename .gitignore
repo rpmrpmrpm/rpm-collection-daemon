@@ -1,0 +1,4 @@
+/target/
+/dist/
+*.spk
+.DS_Store

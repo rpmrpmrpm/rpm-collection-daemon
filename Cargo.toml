@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = ["crates/rpm-wire"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MPL-2.0"
+repository = "https://github.com/rpmrpmrpm/rpm-collection-daemon"
+rust-version = "1.85"
+
+[workspace.dependencies]
+base64 = "0.22"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["raw_value"] }
+serde_repr = "0.1"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
+opt-level = "s"
