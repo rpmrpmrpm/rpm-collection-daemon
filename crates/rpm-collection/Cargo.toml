@@ -1,0 +1,28 @@
+[package]
+name = "rpm-collection"
+description = "One rpm library folder on a NAS: the uploaded catalogues, tracks, covers and space used."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+rpm-wire.workspace = true
+rpm-peer.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+hyper.workspace = true
+http-body-util.workspace = true
+bytes.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+lofty.workspace = true
+unicode-normalization.workspace = true
+futures-util.workspace = true
+libc.workspace = true
+log.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

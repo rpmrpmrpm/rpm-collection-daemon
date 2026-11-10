@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/rpm-wire", "crates/rpm-peer"]
+members = ["crates/rpm-wire", "crates/rpm-peer", "crates/rpm-collection"]
 
 [workspace.package]
 version = "0.1.0"
@@ -36,6 +36,11 @@ x509-parser = "0.16"
 tempfile = "3"
 rpm-wire = { path = "crates/rpm-wire" }
 rpm-peer = { path = "crates/rpm-peer" }
+rpm-collection = { path = "crates/rpm-collection" }
+lofty = "0.22"
+unicode-normalization = "0.1"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+libc = "0.2"
 
 [profile.release]
 lto = true
