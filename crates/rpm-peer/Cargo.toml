@@ -18,6 +18,7 @@ rcgen.workspace = true
 rustls.workspace = true
 tokio.workspace = true
 tokio-rustls.workspace = true
+tokio-util.workspace = true
 hyper.workspace = true
 hyper-util.workspace = true
 http-body-util.workspace = true
@@ -27,8 +28,8 @@ time.workspace = true
 mdns-sd.workspace = true
 log.workspace = true
 serde_json.workspace = true
+serde.workspace = true
 
 [dev-dependencies]
 x509-parser.workspace = true
 tempfile.workspace = true
-serde.workspace = true
