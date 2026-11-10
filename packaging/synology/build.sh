@@ -15,6 +15,8 @@ WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 
 mkdir -p "$WORK/package/bin" "$OUT"
+# The package is written from inside $WORK, so a relative output folder must be made absolute first.
+OUT=$(cd "$OUT" && pwd)
 install -m 0755 "$BINARY" "$WORK/package/bin/rpm-collection-daemon"
 tar -czf "$WORK/package.tgz" -C "$WORK/package" .
 
