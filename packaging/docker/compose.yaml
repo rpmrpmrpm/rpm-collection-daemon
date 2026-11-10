@@ -1,0 +1,23 @@
+# The rpm collection daemon with Docker Compose. Change the four marked lines, then:
+#   docker compose up -d
+services:
+  rpm-collection-daemon:
+    image: ghcr.io/rpmrpmrpm/rpm-collection-daemon:latest
+    container_name: rpm-collection-daemon
+    # Required: multicast DNS does not cross Docker's bridge network.
+    network_mode: host
+    restart: unless-stopped
+    # The user and group that may read the music folder (on most NAS systems, your own user).
+    user: "1000:1000"
+    environment:
+      # Change: how computers reach the music folder over SMB.
+      RPM_SMB_SHARE: smb://nas.local/music/rpm
+      # Change: the space limit for all libraries together. Empty for no limit.
+      RPM_LIMIT: 2TB
+      # The name rpm shows. Default: the host name.
+      # RPM_NAME: My NAS
+    volumes:
+      # Change: the music folder on the NAS. The daemon only reads it.
+      - /path/to/music/rpm:/music:ro
+      # Change: where the daemon keeps its keys and the uploaded catalogues.
+      - /path/to/appdata/rpm-collection-daemon:/data

@@ -1,0 +1,16 @@
+services:
+  rpm-collection-daemon:
+    image: ghcr.io/rpmrpmrpm/rpm-collection-daemon:latest
+    network_mode: host
+    restart: unless-stopped
+    user: "568:568"
+    environment:
+      # Change: how computers reach the libraries dataset over SMB.
+      RPM_SMB_SHARE: smb://truenas.local/rpm
+      # Change: the space limit. Empty for no limit.
+      RPM_LIMIT: 2TB
+    volumes:
+      # Change: the libraries dataset.
+      - /mnt/tank/music/rpm:/music:ro
+      # Change: the daemon's data dataset.
+      - /mnt/tank/apps/rpm-collection-daemon:/data

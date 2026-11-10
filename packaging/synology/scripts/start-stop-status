@@ -1,0 +1,33 @@
+#!/bin/sh
+. "$(dirname "$0")/common"
+
+running() {
+    [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null
+}
+
+case "$1" in
+    start)
+        running && exit 0
+        "$BIN" --config "$CONFIG" >> "$LOGFILE" 2>&1 &
+        echo $! > "$PIDFILE"
+        ;;
+    stop)
+        if running; then
+            kill "$(cat "$PIDFILE")"
+            # Wait for the goodbye announcements to go out.
+            for _ in 1 2 3 4 5; do
+                running || break
+                sleep 1
+            done
+        fi
+        rm -f "$PIDFILE"
+        ;;
+    status)
+        running && exit 0
+        exit 3
+        ;;
+    log)
+        echo "$LOGFILE"
+        ;;
+esac
+exit 0

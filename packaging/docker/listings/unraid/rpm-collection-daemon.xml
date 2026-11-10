@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>rpm-collection-daemon</Name>
+  <Repository>ghcr.io/rpmrpmrpm/rpm-collection-daemon:latest</Repository>
+  <Registry>https://github.com/rpmrpmrpm/rpm-collection-daemon/pkgs/container/rpm-collection-daemon</Registry>
+  <Network>host</Network>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/rpmrpmrpm/rpm/discussions</Support>
+  <Project>https://github.com/rpmrpmrpm/rpm-collection-daemon</Project>
+  <Overview>Keeps rpm music libraries on this server. rpm on your computer finds the server and offers it as a place for your collection. Your TVs and the people you share with play it from here.</Overview>
+  <Category>MediaServer:Music</Category>
+  <ExtraParams>--user 99:100</ExtraParams>
+  <Config Name="Libraries" Target="/music" Default="/mnt/user/music/rpm" Mode="ro" Description="The folder that holds the rpm libraries. Share it over SMB." Type="Path" Display="always" Required="true">/mnt/user/music/rpm</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/rpm-collection-daemon" Mode="rw" Description="Where the daemon keeps its keys and the uploaded catalogues." Type="Path" Display="advanced" Required="true">/mnt/user/appdata/rpm-collection-daemon</Config>
+  <Config Name="SMB address" Target="RPM_SMB_SHARE" Default="smb://tower.local/music/rpm" Mode="" Description="How computers reach the libraries folder over SMB." Type="Variable" Display="always" Required="true">smb://tower.local/music/rpm</Config>
+  <Config Name="Space limit" Target="RPM_LIMIT" Default="" Mode="" Description="For example 2TB. Empty for no limit." Type="Variable" Display="always" Required="false"></Config>
+  <Config Name="Name" Target="RPM_NAME" Default="" Mode="" Description="The name rpm shows. Empty for the server's name." Type="Variable" Display="advanced" Required="false"></Config>
+</Container>

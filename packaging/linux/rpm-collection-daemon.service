@@ -1,0 +1,25 @@
+[Unit]
+Description=rpm collection daemon
+Documentation=https://github.com/rpmrpmrpm/rpm-collection-daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/rpm-collection-daemon --config /etc/rpm-collection-daemon/config.toml
+User=rpm-collection
+Group=rpm-collection
+# The install script adds the group that may read the music folder in a drop-in file.
+StateDirectory=rpm-collection-daemon
+Restart=on-failure
+RestartSec=5
+# The daemon only reads the music folder and writes its own state folder.
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

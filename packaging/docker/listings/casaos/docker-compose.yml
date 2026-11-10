@@ -1,0 +1,29 @@
+name: rpm-collection-daemon
+services:
+  rpm-collection-daemon:
+    image: ghcr.io/rpmrpmrpm/rpm-collection-daemon:latest
+    network_mode: host
+    restart: unless-stopped
+    user: "1000:1000"
+    environment:
+      RPM_SMB_SHARE: smb://casaos.local/Media/rpm
+      RPM_LIMIT: ""
+    volumes:
+      - type: bind
+        source: /DATA/Media/rpm
+        target: /music
+        read_only: true
+      - type: bind
+        source: /DATA/AppData/rpm-collection-daemon
+        target: /data
+x-casaos:
+  architectures: [amd64, arm64]
+  main: rpm-collection-daemon
+  author: rpm
+  category: Media
+  description:
+    en_us: Keeps rpm music libraries on this device. rpm on your computer finds it and offers it as a place for your collection.
+  tagline:
+    en_us: rpm libraries on your own storage
+  title:
+    en_us: rpm collection

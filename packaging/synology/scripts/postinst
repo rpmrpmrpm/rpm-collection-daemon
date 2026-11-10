@@ -1,0 +1,22 @@
+#!/bin/sh
+# Writes the daemon's settings from the install wizard.
+. "$(dirname "$0")/common"
+
+# An upgrade has no wizard. Keep the settings from the install.
+if [ -z "${wizard_share:-}" ] && [ -f "$CONFIG" ]; then
+    exit 0
+fi
+
+ROOT="$(share_path "$wizard_share")/$wizard_folder"
+mkdir -p "$ROOT" "$SYNOPKG_PKGVAR/data"
+HOST=$(hostname)
+
+{
+    echo "root = \"$ROOT\""
+    echo "data = \"$SYNOPKG_PKGVAR/data\""
+    echo "name = \"$HOST\""
+    echo "smb_share = \"smb://$HOST.local/$wizard_share/$wizard_folder\""
+    limit=$(echo "$wizard_limit" | tr -d ' ')
+    [ -n "$limit" ] && echo "limit = \"$limit\""
+} > "$CONFIG"
+exit 0

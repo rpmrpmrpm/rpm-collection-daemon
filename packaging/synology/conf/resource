@@ -1,0 +1,12 @@
+{
+  "data-share": {
+    "shares": [
+      {
+        "name": "{{wizard_share}}",
+        "permission": {
+          "rw": ["rpm-collection-daemon"]
+        }
+      }
+    ]
+  }
+}

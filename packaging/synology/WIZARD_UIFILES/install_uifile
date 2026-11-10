@@ -1,0 +1,56 @@
+[
+  {
+    "step_title": "Where rpm keeps the libraries",
+    "items": [
+      {
+        "type": "textfield",
+        "desc": "rpm keeps each person's library in its own folder inside this shared folder. Computers write to it over SMB, so choose a shared folder that is shared over SMB. The folder is created if it does not exist.",
+        "subitems": [
+          {
+            "key": "wizard_share",
+            "desc": "Shared folder",
+            "defaultValue": "music",
+            "validator": {
+              "allowBlank": false,
+              "regex": {
+                "expr": "/^[^\\\\/:*?\"<>|]+$/",
+                "errorText": "Enter the name of a shared folder."
+              }
+            }
+          },
+          {
+            "key": "wizard_folder",
+            "desc": "Folder inside it",
+            "defaultValue": "rpm",
+            "validator": {
+              "allowBlank": false,
+              "regex": {
+                "expr": "/^[^\\\\/:*?\"<>|]+$/",
+                "errorText": "Enter a folder name."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "textfield",
+        "desc": "The most space all rpm libraries together may use, for example 2TB. Leave it empty for no limit.",
+        "subitems": [
+          {
+            "key": "wizard_limit",
+            "desc": "Space limit",
+            "defaultValue": "",
+            "emptyText": "No limit",
+            "validator": {
+              "allowBlank": true,
+              "regex": {
+                "expr": "/^\\s*([0-9]+(\\.[0-9]+)?\\s*([KMGT]i?B?)?)?\\s*$/i",
+                "errorText": "Enter a size such as 2TB or 500GB."
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

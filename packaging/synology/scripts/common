@@ -1,0 +1,16 @@
+#!/bin/sh
+# Shared by the package scripts. DSM sets SYNOPKG_PKGNAME, SYNOPKG_PKGDEST and SYNOPKG_PKGVAR.
+CONFIG="$SYNOPKG_PKGVAR/config.toml"
+PIDFILE="$SYNOPKG_PKGVAR/daemon.pid"
+LOGFILE="$SYNOPKG_PKGVAR/daemon.log"
+BIN="$SYNOPKG_PKGDEST/bin/rpm-collection-daemon"
+
+# The shared folder chosen in the install wizard, as DSM links it for the package.
+share_path() {
+    link="/var/packages/$SYNOPKG_PKGNAME/shares/$1"
+    if [ -e "$link" ]; then
+        readlink -f "$link"
+    else
+        echo "/volume1/$1"
+    fi
+}
