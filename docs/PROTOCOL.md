@@ -95,8 +95,8 @@ A ticket opens its own route and id only.
 | --- | --- |
 | `GET /rpm/catalog?have=<version>` | The catalogue the owner's computer uploaded: the owner variant for kind 0, the guest variant for kind 1. 204 when `have` is its version. 503 before the first upload |
 | `GET /rpm/track/<rpm id>` | The file, with `Accept-Ranges: bytes`. `Range` is one range only (`bytes=a-b`, `bytes=a-`, `bytes=-n`); anything else gets the whole file. 404 for a track the owner keeps only in the cloud, a missing file, or a path that leaves the library folder |
-| `GET /rpm/cover/<rpm id>` | The album's cover: the folder's image (`cover`, `folder`, `front`, `album`, `albumart` with `.jpg`, `.jpeg`, `.png`, `.webp`, in the order `RPM.Core` uses, matched without regard to case), else the only picture in the folder, else the picture in the file, else the picture in another track of the same folder. 404 when there is none |
-| `GET /rpm/disc/<rpm id>` | `disc.png`, `disc.jpg` or `disc.jpeg` in the album's folder |
+| `GET /rpm/cover/<rpm id>` | The album's cover: the picture chosen in rpm for a kept library (`.rpm/art/<album folder>/cover.jpg` or `cover.png`; `cover.removed` skips the folder's image), else the folder's image (`cover`, `folder`, `front`, `album`, `albumart` with `.jpg`, `.jpeg`, `.png`, `.webp`, in the order `RPM.Core` uses, matched without regard to case), else the only picture in the folder, else the picture in the file, else the picture in another track of the same folder. 404 when there is none |
+| `GET /rpm/disc/<rpm id>` | The disc picture chosen in rpm for a kept library (`.rpm/art/<album folder>/disc.png`; `disc.removed` means none), else `disc.png`, `disc.jpg` or `disc.jpeg` in the album's folder |
 | `GET /rpm/art/<key>` | A picture the owner's computer uploaded, such as `pl:12` for a playlist |
 
 Pictures are sent with `Cache-Control: public, max-age=31536000, immutable`.
