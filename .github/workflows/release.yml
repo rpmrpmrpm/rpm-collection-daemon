@@ -24,8 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: Swatinem/rust-cache@v2
-      - name: Install zig and cargo-zigbuild
+      - name: Install the target, zig and cargo-zigbuild
         run: |
+          rustup target add ${{ matrix.target }}
           pip install ziglang
           cargo install --locked cargo-zigbuild
       - name: Build
