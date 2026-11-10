@@ -7,7 +7,13 @@ if [ -z "${wizard_share:-}" ] && [ -f "$CONFIG" ]; then
     exit 0
 fi
 
-ROOT="$(share_path "$wizard_share")/$wizard_folder"
+# An empty folder name means the shared folder itself, for music that is already there.
+ROOT="$(share_path "$wizard_share")"
+SMB_PATH="$wizard_share"
+if [ -n "${wizard_folder:-}" ]; then
+    ROOT="$ROOT/$wizard_folder"
+    SMB_PATH="$SMB_PATH/$wizard_folder"
+fi
 mkdir -p "$ROOT" "$SYNOPKG_PKGVAR/data"
 HOST=$(hostname)
 
@@ -15,7 +21,7 @@ HOST=$(hostname)
     echo "root = \"$ROOT\""
     echo "data = \"$SYNOPKG_PKGVAR/data\""
     echo "name = \"$HOST\""
-    echo "smb_share = \"smb://$HOST.local/$wizard_share/$wizard_folder\""
+    echo "smb_share = \"smb://$HOST.local/$SMB_PATH\""
     limit=$(echo "$wizard_limit" | tr -d ' ')
     [ -n "$limit" ] && echo "limit = \"$limit\""
 } > "$CONFIG"

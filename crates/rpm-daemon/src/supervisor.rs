@@ -1,17 +1,20 @@
 //! Runs the NAS's own peer and one peer per library folder under `root`, and follows folders that are
-//! added or removed.
+//! added or removed. `root` itself is the library when it holds a library id: that is a folder of music
+//! that was there before rpm, made a library with its files as they are.
 
 use std::collections::HashMap;
 use std::fs;
 use std::io;
 use std::net::{Ipv4Addr, SocketAddr};
 use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use async_trait::async_trait;
 use hyper::{Response, StatusCode};
 use rpm_collection::library::{read_library_id, ID_PATH};
+use rpm_collection::music::{holds_music, is_system_name};
 use rpm_collection::{Library, Space};
 use rpm_peer::beacon::{Announcement, Announcer};
 use rpm_peer::certificate::server_config;
@@ -67,6 +70,8 @@ pub struct Supervisor {
     running: Mutex<HashMap<PathBuf, Running>>,
     nas_port: Mutex<Option<u16>>,
     nas_announcement: Mutex<Option<Announcement>>,
+    /// `root` holds music and no library. Set by each rescan.
+    existing_music: AtomicBool,
     stop: CancellationToken,
 }
 
@@ -87,6 +92,7 @@ impl Supervisor {
             running: Mutex::new(HashMap::new()),
             nas_port: Mutex::new(None),
             nas_announcement: Mutex::new(None),
+            existing_music: AtomicBool::new(false),
             stop: CancellationToken::new(),
         }))
     }
@@ -184,6 +190,15 @@ impl Supervisor {
     /// owner changed, and measures the space after an upload.
     pub async fn rescan(&self) {
         let found = library_folders(&self.config.root);
+        let music = if found.is_empty() {
+            let root = self.config.root.clone();
+            tokio::task::spawn_blocking(move || holds_music(&root))
+                .await
+                .unwrap_or(false)
+        } else {
+            false
+        };
+        self.existing_music.store(music, Ordering::Relaxed);
         let gone: Vec<PathBuf> = {
             let running = self.running.lock().unwrap();
             running
@@ -322,12 +337,20 @@ impl Supervisor {
     }
 
     fn nas_hello(&self) -> PeerHello {
+        let root = self.config.root.canonicalize().ok();
         let mut libraries: Vec<_> = self
             .running
             .lock()
             .unwrap()
-            .values()
-            .map(|r| r.library.entry())
+            .iter()
+            .map(|(folder, r)| {
+                let mut entry = r.library.entry();
+                // The library that is `root` itself has no folder name under `root`.
+                if root.as_deref() == Some(folder.as_path()) {
+                    entry.folder = String::new();
+                }
+                entry
+            })
             .collect();
         libraries.sort_by(|a, b| a.folder.cmp(&b.folder));
         PeerHello {
@@ -337,25 +360,32 @@ impl Supervisor {
             public_key: to_base64url(self.nas.public_key()),
             track_count: 0,
             library_id: None,
-            nas: Some(self.space.report(libraries)),
+            nas: Some(
+                self.space
+                    .report(libraries, self.existing_music.load(Ordering::Relaxed)),
+            ),
         }
     }
 }
 
-/// The direct subfolders of `root` that hold a library id. Hidden folders and the folders NAS systems
-/// keep for themselves (`@eaDir`, `#recycle`, `#snapshot`) are skipped.
+/// The library folders under `root`. When `root` holds a library id, it is the only one, and its
+/// subfolders are that library's own folders. Otherwise they are the direct subfolders of `root` that hold
+/// a library id. Hidden folders and the folders NAS systems keep for themselves (`@eaDir`, `#recycle`,
+/// `#snapshot`) are skipped.
 pub fn library_folders(root: &Path) -> Vec<PathBuf> {
+    if root.join(ID_PATH).is_file() && read_library_id(root).is_ok() {
+        return root
+            .canonicalize()
+            .map(|root| vec![root])
+            .unwrap_or_default();
+    }
     let Ok(entries) = fs::read_dir(root) else {
         return Vec::new();
     };
     let mut folders: Vec<PathBuf> = entries
         .flatten()
         .filter(|entry| entry.file_type().map(|t| t.is_dir()).unwrap_or(false))
-        .filter(|entry| {
-            let name = entry.file_name();
-            let name = name.to_string_lossy();
-            !(name.starts_with('.') || name.starts_with('@') || name.starts_with('#'))
-        })
+        .filter(|entry| !is_system_name(&entry.file_name().to_string_lossy()))
         .map(|entry| entry.path())
         .filter(|folder| folder.join(ID_PATH).is_file() && read_library_id(folder).is_ok())
         .filter_map(|folder| folder.canonicalize().ok())

@@ -4,7 +4,7 @@
     "items": [
       {
         "type": "textfield",
-        "desc": "rpm keeps each person's library in its own folder inside this shared folder. Computers write to it over SMB, so choose a shared folder that is shared over SMB. The folder is created if it does not exist.",
+        "desc": "rpm keeps each person's library in its own folder inside this folder. If the folder already holds your music, rpm can use that music as it is, without changing or moving the files. Computers write to the folder over SMB, so choose a shared folder that is shared over SMB. Leave the folder name empty to use the shared folder itself. The folder is created if it does not exist.",
         "subitems": [
           {
             "key": "wizard_share",
@@ -22,10 +22,11 @@
             "key": "wizard_folder",
             "desc": "Folder inside it",
             "defaultValue": "rpm",
+            "emptyText": "The shared folder itself",
             "validator": {
-              "allowBlank": false,
+              "allowBlank": true,
               "regex": {
-                "expr": "/^[^\\\\/:*?\"<>|]+$/",
+                "expr": "/^[^\\\\/:*?\"<>|]*$/",
                 "errorText": "Enter a folder name."
               }
             }

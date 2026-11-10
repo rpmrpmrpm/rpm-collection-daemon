@@ -392,7 +392,7 @@ impl Routes for Library {
             public_key: to_base64url(self.identity.public_key()),
             track_count: self.track_count() as i32,
             library_id: Some(self.library_id.clone()),
-            nas: Some(self.space.report(Vec::new())),
+            nas: Some(self.space.report(Vec::new(), false)),
         }
     }
 

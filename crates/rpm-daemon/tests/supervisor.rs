@@ -257,6 +257,51 @@ async fn nas_hello_reports_limit_used_and_free() {
     supervisor.shutdown();
 }
 
+#[test]
+fn a_root_with_a_library_id_is_the_only_library() {
+    let temp = tempfile::tempdir().unwrap();
+    let root = temp.path().join("music");
+    make_library(&root, "", ID_A);
+    // An artist folder that happens to hold an id is part of the root's library, not a library.
+    make_library(&root, "Artist", ID_B);
+    assert_eq!(library_folders(&root), vec![root.canonicalize().unwrap()]);
+}
+
+#[tokio::test]
+async fn existing_music_is_reported_and_then_served_as_the_root_library() {
+    let temp = tempfile::tempdir().unwrap();
+    let config = config(temp.path());
+    let root = config.root.clone();
+    let song = root.join("Artist/Album/01 Song.flac");
+    fs::create_dir_all(song.parent().unwrap()).unwrap();
+    fs::write(&song, vec![1u8; 100]).unwrap();
+    let supervisor = Supervisor::new(config, None).unwrap();
+    let port = supervisor.start().await.unwrap();
+
+    let hello = |body: &[u8]| {
+        serde_json::from_slice::<PeerHello>(body)
+            .unwrap()
+            .nas
+            .unwrap()
+    };
+    let nas = hello(&get(port, "/rpm/hello", None).await.body);
+    assert!(nas.existing_music);
+    assert!(nas.libraries.is_empty());
+
+    // A computer makes the folder itself a library: it adds only .rpm/library.json.
+    make_library(&root, "", ID_A);
+    supervisor.rescan().await;
+
+    let nas = hello(&get(port, "/rpm/hello", None).await.body);
+    assert!(!nas.existing_music);
+    assert_eq!(nas.libraries.len(), 1);
+    assert_eq!(nas.libraries[0].folder, "");
+    assert_eq!(nas.libraries[0].library_id, ID_A);
+    assert_eq!(supervisor.served().len(), 1);
+    assert_eq!(fs::read(&song).unwrap(), vec![1u8; 100]);
+    supervisor.shutdown();
+}
+
 #[tokio::test]
 async fn nas_peer_gives_no_session() {
     let temp = tempfile::tempdir().unwrap();

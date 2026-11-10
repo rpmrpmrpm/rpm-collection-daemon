@@ -56,7 +56,7 @@ connections at once. Methods other than GET, HEAD, POST and PUT are answered 405
 | `deviceId`, `name`, `publicKey` | As in the announcement |
 | `trackCount` | Tracks in the catalogue (0 for the NAS) |
 | `libraryId` | The library id. Libraries only |
-| `nas` | `smb`, `limitBytes` (left out when there is no limit), `usedBytes`, `freeBytes`, and for the NAS `libraries`: each `{ folder, libraryId, name, account, deviceId, publicKey }` |
+| `nas` | `smb`, `limitBytes` (left out when there is no limit), `usedBytes`, `freeBytes`, and for the NAS `libraries`: each `{ folder, libraryId, name, account, deviceId, publicKey }`, with an empty `folder` for a library that is the folder `smb` names itself, and `existingMusic`: `true` when that folder holds music files (at most four folders down, outside hidden and system folders) and no library, so a computer may make the folder itself a library |
 
 **`GET /rpm/session`** answers `{ "challenge", "expiresIn" }`. The challenge is 24 random bytes in
 base64url, and can be answered once, within 60 seconds. At most 256 are open; a new one beyond that
@@ -125,7 +125,7 @@ reader that is in any of their trust lists.
 
 | File | Written by | Meaning |
 | --- | --- | --- |
-| `.rpm/library.json` | rpm | `{"id":"<32 lowercase hex>"}`. A folder without it is not a library |
+| `.rpm/library.json` | rpm | `{"id":"<32 lowercase hex>"}`. A folder without it is not a library. When the daemon's own folder holds it, that folder is the only library, and its subfolders are the library's folders |
 | `.rpm/daemon-owner.json` | rpm | `{ "keys": [ { "publicKey", "name", "account" } ] }`: the owner computers. `account` is base64url of the first 12 bytes of SHA-256 of the account's user id, or empty |
 
 The daemon never writes inside the library folders. It keeps its keys and the uploads in its own

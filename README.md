@@ -31,7 +31,7 @@ To package it for another system, see [docs/PORTING.md](docs/PORTING.md).
 
 | Setting | Environment variable | Meaning |
 | --- | --- | --- |
-| `root` | `RPM_ROOT` | The folder that holds the libraries. Each subfolder is one person's library. |
+| `root` | `RPM_ROOT` | The folder that holds the libraries. Each subfolder is one person's library. When the folder already holds your music, rpm can make the folder itself one library and leave the files as they are. |
 | `limit` | `RPM_LIMIT` | The space limit for all libraries together, for example `2TB`. Empty for no limit. |
 | `name` | `RPM_NAME` | The NAS name to announce. Default: the host name. |
 | `data` | `RPM_DATA` | Where the daemon keeps its keys and the uploaded catalogues. Never inside `root`. |

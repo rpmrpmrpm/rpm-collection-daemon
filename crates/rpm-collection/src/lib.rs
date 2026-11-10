@@ -9,6 +9,7 @@ pub mod covers;
 pub mod index;
 pub mod library;
 pub mod media;
+pub mod music;
 pub mod space;
 pub mod store;
 

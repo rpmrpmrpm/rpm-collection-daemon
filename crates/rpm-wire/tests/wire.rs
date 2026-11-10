@@ -51,12 +51,20 @@ fn nas_hello_omits_a_missing_limit() {
         used_bytes: 10,
         free_bytes: 20,
         libraries: vec![],
+        existing_music: true,
     };
     let json = serde_json::to_string(&nas).unwrap();
     assert_eq!(
         json,
-        r#"{"smb":"smb://nas/music/rpm","usedBytes":10,"freeBytes":20,"libraries":[]}"#
+        r#"{"smb":"smb://nas/music/rpm","usedBytes":10,"freeBytes":20,"libraries":[],"existingMusic":true}"#
     );
+}
+
+#[test]
+fn nas_hello_without_existing_music_reads_as_none() {
+    let nas: NasHello =
+        serde_json::from_str(r#"{"smb":"smb://nas/music","usedBytes":1,"freeBytes":2}"#).unwrap();
+    assert!(!nas.existing_music);
 }
 
 #[test]

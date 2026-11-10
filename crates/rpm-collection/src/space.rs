@@ -46,13 +46,14 @@ impl Space {
     }
 
     /// The `nas` part of a hello.
-    pub fn report(&self, libraries: Vec<NasLibraryEntry>) -> NasHello {
+    pub fn report(&self, libraries: Vec<NasLibraryEntry>, existing_music: bool) -> NasHello {
         NasHello {
             smb: self.smb.clone(),
             limit_bytes: self.limit,
             used_bytes: self.used(),
             free_bytes: self.free(),
             libraries,
+            existing_music,
         }
     }
 }

@@ -34,12 +34,16 @@ pub struct NasHello {
     /// The libraries on the NAS. Empty in a library's own hello.
     #[serde(default)]
     pub libraries: Vec<NasLibraryEntry>,
+    /// The folder holds music and no rpm library. A computer may make the folder itself a library, with
+    /// the files as they are.
+    #[serde(default)]
+    pub existing_music: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NasLibraryEntry {
-    /// The folder's name under the libraries folder.
+    /// The folder's name under the libraries folder. Empty when the library is that folder itself.
     pub folder: String,
     pub library_id: String,
     /// The name the owner's computer wrote into the claim file, or the folder name before a claim.
